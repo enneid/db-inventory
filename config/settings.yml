@@ -1,0 +1,15 @@
+debug: !ENV ${DB_INVENTORY_DEBUG:true}
+database:
+  NAME: !ENV ${DB_INVENTORY_DATABASE_NAME:dbinventory}
+  ENGINE: django.db.backends.postgresql
+  USER: !ENV ${DB_INVENTORY_DATABASE_USER:postgres}
+  PASSWORD: !ENV ${DB_INVENTORY_DATABASE_PASSWORD:epf2}
+  HOST: 127.0.0.1
+  PORT: 5432
+secret_keys: 
+  secret: !ENV ${DB_INVENTORY_SECRET_KEY:db_secret}
+logger:
+  filename: logs/log.log
+  filelevel: DEBUG
+  level: INFO
+  handlers: [file, console]  
