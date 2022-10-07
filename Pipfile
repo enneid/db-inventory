@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+alembic = "*"
+fastapi = "*"
+psycopg2 = "*"
+pydantic = "*"
+python-jose = "*"
+sqlalchemy = "*"
+pyaml-env = "*"
+passlib = "*"
+python-box = "*"
+uvicorn = "*"
+bcrypt = "*"
+cryptography = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

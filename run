@@ -14,7 +14,7 @@ import importlib.util
 
 
 from importlib.machinery import SourceFileLoader
-if(len(sys.argv)):
+if(len(sys.argv)==1):
     scripts = glob.glob(r'scripts/*.py')+glob.glob(r'scripts/*/*.py')
     print("available scripts")
     print(scripts)
