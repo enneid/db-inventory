@@ -1,4 +1,5 @@
 debug: !ENV ${DB_INVENTORY_DEBUG:true}
+auto_console: !ENV ${DB_INVENTORY_AUTO_CONSOLE_ANSWER:none}
 database:
   NAME: !ENV ${DB_INVENTORY_DATABASE_NAME:dbinventory}
   ENGINE: postgresql
@@ -12,4 +13,7 @@ logger:
   filename: logs/log.log
   filelevel: DEBUG
   level: INFO
-  handlers: [file, console]  
+  handlers: [file, console]
+server:
+  host: !ENV ${DB_INVENTORY_API_HOST:0.0.0.0}
+  port: !ENV ${DB_INVENTORY_API_HOST:8000}   
