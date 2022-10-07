@@ -1,4 +1,7 @@
 # db-inventory
-Commnads
+Start project
     create virtual enviroment: python -m venv env
-    migrations:  alembic upgrade head
+    activate venv: env/Scripts/activate
+    deactivate venv: env/Scripts/deactivate
+    install pipenv: pip install pipenv
+    install packages: pipenv install
