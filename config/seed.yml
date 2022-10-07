@@ -1,0 +1,51 @@
+inventory:
+  departments:
+    - name: Administration
+      code: AD
+    - name: carpentry
+      code: CA
+      definitions:
+        type:
+          prefix: "" 
+          simple: false
+          compute: true
+          values:
+            - name: softwood
+              value: SW
+              description: "Soft Wood"
+              required: [species, woodsize]
+              unit: "cm"
+              minimalunit: 100
+            - name: hardwood
+              value: HW
+              description: "Hard Wood"
+              required: [species, hardwoodsize]
+              unit: "cm"
+              minimalunit: 100
+            - name: tool
+              value: T
+              description: "Tool"
+              disposable: false
+              required: [toolsubtype]
+            - name: glue
+              value: GL    
+        spicies: 
+          prefix: ""
+          values: [cider, beech]         
+        woodsize:
+          strict: true
+          maxvaluelength: 3
+          prefix: DIM
+          description: "Sizes puted as thickness and width"
+          values: ["2X4", "3X2"]
+        hardwoodsize:
+          prefix: DIM
+          strict: false
+          maxvaluelength: 3
+          description: "Sizes puted as thickness and width"
+          values: ["2X4", "3X2"]
+          disabledvalues: [] 
+        toolsubtype:
+          strict: false
+          maxvaluelength: 10
+          simple: false          
