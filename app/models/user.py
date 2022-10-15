@@ -7,6 +7,7 @@ from .app_model import AppModel
 
 class User(AppModel):
     __tablename__ = "users"
+    __compute_fields__ = ['message']
 
     username = Column(String, nullable=False, index=True, unique=True)
     encrypted_password = Column(String, nullable=False)

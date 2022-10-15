@@ -1,7 +1,10 @@
 from sqlalchemy.orm import Session
-from .. import models
-import logging
+from app import schemes
+from app import models
+from .base_cruds import BaseCruds
 
-def get_departments(db: Session):
-    deps =  db.query(models.Department).all()
-    return deps
+class DepartmentsCruds(BaseCruds):
+    __model__ = models.Department
+    
+    __create_scheme__ = schemes.DepartmentBase
+    __change_scheme__ = schemes.DepartmentBase

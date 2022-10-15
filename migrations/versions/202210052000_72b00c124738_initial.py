@@ -41,6 +41,34 @@ def upgrade() -> None:
         sa.Column('jsondata', sa.JSON, nullable=False)
     )
 
+    op.create_table(
+        'resources',
+        sa.Column('id', sa.Integer, primary_key=True, index=True),
+        sa.Column('code', sa.String(50), nullable=False, index=True, unique=True),
+        sa.Column('params', sa.String(300), nullable=False, index=True),
+        sa.Column('department_id', sa.INTEGER, sa.ForeignKey('departments.id', ondelete='SET NULL'),index=True),
+        sa.Column('amount', sa.Integer, nullable=False, index=True),
+        sa.Column('created_at', sa.DateTime, nullable=False, index=True),
+        sa.Column('updated_at', sa.DateTime, nullable=False, index=True),
+        sa.Column('jsondata', sa.JSON, nullable=False)
+    )
+
+    op.create_table(
+        'entries',
+        sa.Column('id', sa.Integer, primary_key=True, index=True),
+        sa.Column('resource_id', sa.INTEGER, sa.ForeignKey('resources.id', ondelete='SET NULL'),index=True),
+        sa.Column('resource_code', sa.String(50),index=True),
+        sa.Column('department_id', sa.INTEGER, sa.ForeignKey('departments.id', ondelete='SET NULL'),index=True),
+        sa.Column('department_code', sa.String(50),index=True),
+        sa.Column('user_id', sa.INTEGER, sa.ForeignKey('departments.id', ondelete='SET NULL'),index=True),
+        sa.Column('username', sa.String(50), index=True),
+        sa.Column('operation', sa.String(50), nullable=False, index=True),
+        sa.Column('amount', sa.Integer, nullable=False, index=True),
+        sa.Column('created_at', sa.DateTime, nullable=False, index=True),
+        sa.Column('updated_at', sa.DateTime, nullable=False, index=True),
+        sa.Column('jsondata', sa.JSON, nullable=False)
+    )
+
 
 def downgrade() -> None:
     op.drop_table('departments')

@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from . import cruds, models, schemes
 from app.setup.fastapi import app, db_session
+from app.routes import department_router, user_router
 # from app.authorization import *
 
 
@@ -21,7 +22,7 @@ from app.setup.fastapi import app, db_session
 #     allow_credentials=True,
 #     allow_methods=["*"],
 #     allow_headers=["*"]
-# )
+# ) 
 
 
 
@@ -31,12 +32,12 @@ def read_root() -> dict:
     return {"message": "Welcome to your todo list."}
 
 
-@app.get("/departments/", response_model=List[schemes.Department])
-def read_items( db: Session = Depends(db_session)):
-    items = cruds.get_departments(db)
-    return items
 
-@app.get("/users/", response_model=List[schemes.User])
-def read_items( db: Session = Depends(db_session)):
-    items = cruds.get_users(db)
-    return items    
+
+# @app.get("/users/", response_model=List[schemes.User])
+# def read_items( db: Session = Depends(db_session)):
+#     items = cruds.UserCruds(db).get_records()
+#     return items    
+
+app.include_router(user_router)
+app.include_router(department_router)

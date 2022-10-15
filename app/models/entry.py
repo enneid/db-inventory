@@ -1,16 +1,34 @@
-from django.db import models
-from .app_model import AppModel
+from sqlalchemy import JSON, Column, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship, validates
+from app.models.department import Department
+from app.models.resource import Resource
+from app.models.user import User
 from app import descriptors
+from .app_model import AppModel
 
 class Entry(AppModel):
-    resource = models.ForeignKey('Resource', on_delete=models.SET_NULL, null=True)
-    resource_code = descriptors.UpperCaseCharField(max_length=30, db_index=True)
-    # user = models.ForeignKey('User', on_delete=models.SET_NULL, null=True)
-    username = descriptors.UpperCaseCharField(max_length=30, db_index=True)
-    department = models.ForeignKey('Department', on_delete=models.SET_NULL, null=True)
-    department_code = descriptors.UpperCaseCharField(max_length=30, db_index=True)
-    operation = descriptors.UpperCaseCharField(max_length=30, db_index=True, null=False)
-    message = models.CharField(max_length=255,  null=False)
-    amount = models.PositiveBigIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    metadata = models.JSONField(default=dict)
+    __tablename__ = "entries"
+
+    resource_id = Column(Integer, ForeignKey("resources.id"))
+    resource: Resource = relationship('Resource')
+    resource_code = Column(String, max_length=50, db_index=True)
+    department_id = Column(Integer, ForeignKey("departments.id"))
+    department: Department = relationship("Department")
+    department_code = Column(String, max_length=50, db_index=True)
+    users_id = Column(Integer, ForeignKey("users.id"))
+    user: User = relationship("User")
+    username =  Column(String, max_length=50, db_index=True)
+    operation =  Column(String, max_length=50, db_index=True)
+    amount = Column(Integer)
+    jsondata = Column(JSON, default=dict)
+
+    message: str = descriptors.DictDeepField(dictfield="jsondata")
+    params: str = descriptors.DictDeepField(dictfield="jsondata")
+
+    @validates('resource_code', 'department_code', 'username', 'operation')
+    def convert_upper(self, key, value):
+        return value.upper()
+
+    class Meta:
+        pass    
+     

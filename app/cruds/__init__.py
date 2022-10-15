@@ -1,2 +1,2 @@
-from .departments import *
-from .users import *
+from .departments import DepartmentsCruds
+from .user_cruds import UserCruds

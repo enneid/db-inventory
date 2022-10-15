@@ -1,5 +1,6 @@
 # from asyncio.windows_events import NULL
 # from dataclasses import fields
+from typing import Dict
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, JSON
 from sqlalchemy.orm import relationship, validates
 from sqlalchemy.sql import func
@@ -27,7 +28,7 @@ class Department(AppModel):
     # created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     # updated_at = models.DateTimeField(auto_now=True, db_index=True)
     # metadata = models.JSONField(default=dict)
-    definitions = descriptors.DictDeepField(dictfield="jsondata")
+    definitions: Dict = descriptors.DictDeepField(dictfield="jsondata")
 
     class Meta:
         pass
