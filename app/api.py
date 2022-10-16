@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from . import cruds, models, schemes
 from app.setup.fastapi import app, db_session
-from app.routes import department_router, resource_router, user_router
+from app.routes import department_router, entry_router, resource_router, user_router
 # from app.authorization import *
 
 
@@ -34,11 +34,9 @@ def read_root() -> dict:
 
 
 
-# @app.get("/users/", response_model=List[schemes.User])
-# def read_items( db: Session = Depends(db_session)):
-#     items = cruds.UserCruds(db).get_records()
-#     return items    
+  
 
 app.include_router(user_router)
 app.include_router(department_router)
 app.include_router(resource_router)
+app.include_router(entry_router)

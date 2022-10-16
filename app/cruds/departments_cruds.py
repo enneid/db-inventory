@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session
 from app import schemes, models
 from .base_cruds import BaseCruds
 

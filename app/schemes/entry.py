@@ -15,4 +15,6 @@ class EntryBase(SchemeBase):
     amount: int
 
 class Entry(EntryBase, TimestampScheme):
-    pass   
+    class Config:
+        orm_mode = True
+

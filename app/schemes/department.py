@@ -12,11 +12,5 @@ class DepartmentBase(SchemeBase):
     definitions: typing.Optional[dict]
 
 class Department(DepartmentBase, TimestampScheme):
-    
-
-
-
-
-
     class Config:
         orm_mode = True

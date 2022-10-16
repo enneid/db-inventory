@@ -8,6 +8,7 @@ from .app_model import AppModel
 
 class Entry(AppModel):
     __tablename__ = "entries"
+    __compute_fields__ = ['message', 'params']
 
     resource_id = Column(Integer, ForeignKey("resources.id"))
     resource: Resource = relationship('Resource')

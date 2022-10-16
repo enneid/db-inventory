@@ -1,9 +1,5 @@
-from sqlalchemy.orm import Session
-
 from .base_cruds import BaseCruds
-
 from .. import models, schemes
-
 
 class EntryCruds(BaseCruds):
     __model__ = models.Entry

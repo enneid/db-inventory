@@ -24,7 +24,7 @@ class ResourceCruds(BaseCruds):
         return self.record.department
     
     def make_operation(self, operation: ResourceOperation, amount: int, message: str=''):
-        message = message.strip()
+        message = (message or '').strip()
         username = self.current_username()
         relative = True
         match operation:
@@ -41,7 +41,7 @@ class ResourceCruds(BaseCruds):
                     message =f"Resource {self.record.code} from {self.department().name} has been reported error by {username} with amount {amount}"
                 amount = 0            
         if(message == ""): 
-            message =f"Resource {self.record.code} from {self.department().name} has been {operation.value.lower}ed by {username} with amount {amount}"
+            message =f"Resource {self.record.code} from {self.department().name} has been {operation.value.lower()}ed by {username} with amount {amount}"
 
         self._change_amount(amount, relative)
         self._create_entry(operation, amount, message)
