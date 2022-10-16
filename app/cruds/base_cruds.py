@@ -2,8 +2,10 @@ from abc import abstractmethod
 import typing
 
 from sqlalchemy.orm import Session, Query
+from app.libs.dict_helper import popattr
 
 from app.models.app_model import AppModel
+from app.models.user import User
 from app.schemes.scheme_base import SchemeBase
 
 class BaseCruds():
@@ -12,14 +14,18 @@ class BaseCruds():
     __model__ = AppModel
     __create_scheme__ = SchemeBase
     __change_scheme__ = SchemeBase
+    
+    current_user: User
+    commit_changes = True
+    
     _record: __model__
     _record_id: int = None
 
-    def __init__(self, db: Session, record_id: int=None, record: __model__=None):
+    def __init__(self, db: Session, current_user: User = None, record_id: int=None, record: __model__=None):
         self.db = db
         self._record_id = record_id
         self._record = record
-
+        self.current_user = current_user
 
     @property
     def record_id(self):
@@ -39,9 +45,7 @@ class BaseCruds():
     @record.setter
     def record(self, rec):
         self._record = rec
-        if rec is not None: self._record_id = rec.id
-        
-             
+        if rec is not None: self._record_id = rec.id             
         
     def get_records(self, **params):
         return self.prepare_query(**params).all() 
@@ -49,9 +53,11 @@ class BaseCruds():
     def find_record(self, record_id: int = None):
         record_id = record_id or self.record_id
         if(record_id is None): raise Exception("record_id not set")
+        return self.query().filter(self.__model__.id == record_id).first()
 
-        model = self.__model__
-        return self.query().filter(model.id == record_id).first()
+    def reload_record(self):
+        if(self._record): self.db.refresh(self._record)
+        return self.record
 
     def filter_query(self, query: Query, **params):
         return query
@@ -68,6 +74,8 @@ class BaseCruds():
         return query
 
     def count_records(self, **params):
+        popattr(params, "skip")
+        popattr(params, "limit")
         return self.prepare_query(**params, skip=0, limit=-1).count()
 
     def prepare_query(self, query: Query = None,  preload = [], skip: int = 0, limit: int = 100, **params):
@@ -80,14 +88,16 @@ class BaseCruds():
     def query(self):
         return self.db.query(self.__model__)
 
-    def push_changes(self, commit=True):
+    def push_changes(self, commit: bool=None):
+        if commit is None: commit = self.commit_changes
         if commit == True:
             self.db.commit()
         else:
             self.db.flush()      
 
-    def prepare_create(self, params: __create_scheme__): 
-        return None        
+    def prepare_create(self, params: __create_scheme__):
+        model = self.__model__() 
+        return self.generic_prepare_update(model, params)
     
     def create(self, params: __create_scheme__, commit=True):
         model = self.prepare_create(params)
@@ -96,15 +106,21 @@ class BaseCruds():
         self.db.refresh(model)
         return model  
 
-    def destroy(self):
+    def destroy(self,  commit=None):
        self.db.delete(self.record)
-       self.db.flush()
+       self.push_changes(commit)
 
 
-    def prepare_update(self, record: __model__, params: __change_scheme__):
-        pass
+    def generic_prepare_update(self, params: dict, resource: __model__ = None):
+        resource = resource or self.resource
+        for var, value in vars(params).items():
+            if value: setattr(resource, var, value)
+        return resource     
 
-    def update(self, params: __change_scheme__, commit=True):
+    def prepare_update(self, params: __change_scheme__, resource: __model__= None):
+        self.generic_prepare_update(params.dict, resource = resource)
+
+    def update(self, params: __change_scheme__, commit=None):
         self.prepare_update(self.record, params)
         self.push_changes(commit)
         self.db.refresh(self.record)

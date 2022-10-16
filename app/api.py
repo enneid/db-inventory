@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from . import cruds, models, schemes
 from app.setup.fastapi import app, db_session
-from app.routes import department_router, user_router
+from app.routes import department_router, resource_router, user_router
 # from app.authorization import *
 
 
@@ -41,3 +41,4 @@ def read_root() -> dict:
 
 app.include_router(user_router)
 app.include_router(department_router)
+app.include_router(resource_router)

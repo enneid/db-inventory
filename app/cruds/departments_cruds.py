@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
-from app import schemes
-from app import models
+from app import schemes, models
 from .base_cruds import BaseCruds
 
 class DepartmentsCruds(BaseCruds):
