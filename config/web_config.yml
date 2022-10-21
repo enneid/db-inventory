@@ -1,0 +1,37 @@
+api:
+  root:
+    host: ${DBINVENTORY_HOST:localhost}
+    protocol: ${DBINVENTORY_PROTOCOL:http}
+    port: ${DBINVENTORY_PORT:8000}
+    origin_url: "%{protocol}://%{host}%{port}"
+    action_url: "%{origin_url}/%{path}"
+    #credentials only in development mode (cookie storage as bypass session for cros origin session)
+    corsmode: cors
+    credentials:  ${DBINVENTORY_USE_CREDENTIALS:true}
+    from_base: ${DBINVENTORY_ORIGIN_FROM_BASE:false}
+    crud_path: "%{resource}"
+    crud_member_path: "%{crud_path}/%{id}"
+    crud:
+      show_path: "%{crud_member_path}"
+      show_method: "get"
+      index_path: "%{crud_path}"
+      index_method: "get"
+      update_path: "%{crud_member_path}"
+      update_method: "put"
+      delete_path: "%{crud_member_path}"
+      delete_method: "delete"
+      create_path: "%{crud_path}"
+      create_method: "post"
+  admin:
+    module: "admin"
+    departments:
+      resource: "departments"
+    users:
+      resource: "users"
+      change_password_path: "%{crud_member_path}/change_password"
+      change_password_method: "put"
+  client:    
+    resources:
+      resource: "resources"
+
+  
